@@ -61,3 +61,4 @@ def test_resolve_entities_integration():
     assert res.loc[0, "item_key"] == res.loc[1, "item_key"]
     assert res.loc[0, "item_key"] == "item_m100"
     assert res.loc[2, "item_key"].startswith("item_")
+

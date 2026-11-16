@@ -116,3 +116,4 @@ classifier:
     assert a1_row["include"] == 1
     assert a1_row["spend"] == 1000.0
     assert a1_row["l1"] == "MRO"
+

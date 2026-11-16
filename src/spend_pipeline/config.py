@@ -166,3 +166,4 @@ def load_config(config_path: str) -> CompanyConfig:
         classifier=clf,
         raw_config=data,
     )
+

@@ -95,3 +95,4 @@ def test_classifier_tree_consistency(tmp_path):
     # Confidence scores must be valid floats between 0 and 1
     assert 0.0 <= res.loc[0, "confidence"] <= 1.0
     assert 0.0 <= res.loc[1, "confidence"] <= 1.0
+

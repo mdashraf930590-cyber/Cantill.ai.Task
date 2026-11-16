@@ -69,3 +69,4 @@ def test_fx_lookup_manager(tmp_path):
 
     # Unknown currency default 1.0
     assert mgr.get_rate("XYZ", pd.to_datetime("2024-01-01")) == 1.0
+

@@ -270,7 +270,9 @@ class HierarchicalSpendClassifier:
         # Compute predictions
         if self.has_few_shot and self.prototype_embs is not None:
             # Few-shot 1-NN similarity
-            few_sim = dense_embs @ self.prototype_embs.T
+            with np.errstate(divide="ignore", over="ignore", invalid="ignore"):
+                few_sim = np.matmul(dense_embs, self.prototype_embs.T)
+                few_sim = np.nan_to_num(few_sim, nan=0.0)
             top_nn = np.argmax(few_sim, axis=1)
             nn_sims = np.max(few_sim, axis=1)
 
@@ -279,7 +281,9 @@ class HierarchicalSpendClassifier:
             confidences = np.clip(nn_sims, 0.5, 0.99)
         else:
             # Pure Zero-shot Hybrid: Dense bi-encoder + Sparse TF-IDF
-            dense_sim = dense_embs @ self.tax_embeddings.T
+            with np.errstate(divide="ignore", over="ignore", invalid="ignore"):
+                dense_sim = np.matmul(dense_embs, self.tax_embeddings.T)
+                dense_sim = np.nan_to_num(dense_sim, nan=0.0)
 
             # Sparse lexical matching
             text_tfidf = self.tfidf_vectorizer.transform(active_texts)

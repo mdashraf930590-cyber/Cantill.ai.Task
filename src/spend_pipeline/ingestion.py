@@ -287,3 +287,4 @@ def ingest_company_data(config: CompanyConfig) -> pd.DataFrame:
 
     combined_df = pd.concat(unified_frames, ignore_index=True)
     return combined_df
+

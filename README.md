@@ -120,3 +120,4 @@ All 17 tests validate ingestion parsing, tax deduction, FX fallbacks, gating pre
 | **Combined** | **106,577 rows** | **55.55 s** | **1,918 rows/sec** | — | — | — | — | — |
 
 *The pipeline comfortably exceeds the 60-minute threshold for 25,000 rows by completing over 106,000 rows in under 1 minute.*
+

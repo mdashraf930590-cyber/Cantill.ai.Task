@@ -77,3 +77,4 @@ To classify into an arbitrary, unseen category hierarchy (levels 1–4) without 
     Using Gemini 1.5 Flash or GPT-4o-mini in batched JSON mode (~80 tokens in, ~20 tokens out per procurement line):
     $$\text{Cost per 1,000 lines} \approx 1,000 \times \left( \frac{80}{10^6} \times \$0.075 + \frac{20}{10^6} \times \$0.30 \right) \approx \mathbf{\$0.012\text{ per 1,000 lines}}$$
     Even routing 100% of rows to an external LLM costs only ~$0.012 per 1,000 lines ($0.30 for 25,000 rows).
+

@@ -112,3 +112,4 @@ def export_submission_csv(
     dest.parent.mkdir(parents=True, exist_ok=True)
     out_df[REQUIRED_COLUMNS].to_csv(dest, index=False)
     return dest
+

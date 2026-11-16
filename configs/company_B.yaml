@@ -65,3 +65,4 @@ classifier:
   temperature: 0.15
   use_few_shot: true
   few_shot_knn_k: 1
+

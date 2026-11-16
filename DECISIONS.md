@@ -180,3 +180,4 @@ This document details the anomalies, schema ambiguities, and business logic disc
   - Company A (65,549 rows): **27.41 seconds** (2,391 rows/sec).
   - Company B (41,028 rows): **28.14 seconds** (1,458 rows/sec).
   - Total end-to-end execution: **55.55 seconds**, exceeding the 60-minute threshold by over 65x.
+

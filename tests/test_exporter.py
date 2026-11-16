@@ -95,3 +95,4 @@ def test_export_submission_csv(tmp_path):
     assert read_back.loc[0, "spend"] == 100.0
     assert read_back.loc[1, "spend"] == 0.0
     assert read_back.loc[1, "l1"] == "" or pd.isna(read_back.loc[1, "l1"])
+
