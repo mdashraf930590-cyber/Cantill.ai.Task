@@ -15,6 +15,7 @@ def main():
     )
     parser.add_argument("--config", type=str, help="Path to company YAML config file")
     parser.add_argument("--output", type=str, help="Destination CSV path for final submission")
+    parser.add_argument("--data-dir", type=str, help="Optional directory override for source data files (e.g. for blind test)")
     parser.add_argument("--evaluate", action="store_true", help="Run offline evaluation harness against ground truth labels")
     parser.add_argument("--labels", type=str, help="Path to evaluation labels CSV (optional override)")
     parser.add_argument("--all", action="store_true", help="Run pipeline for both Company A and Company B")
@@ -25,18 +26,25 @@ def main():
         print("=== Running Pipeline for Company A ===")
         df_a, m_a = run_pipeline_for_company(
             config_path="configs/company_A.yaml",
-            output_path="submission/cantill__A.csv",
+            output_path="submission/ashraf__A.csv",
             evaluate=True,
             labels_path="company_A/labels_A.csv",
+            data_dir=args.data_dir,
         )
 
         print("=== Running Pipeline for Company B ===")
         df_b, m_b = run_pipeline_for_company(
             config_path="configs/company_B.yaml",
-            output_path="submission/cantill__B.csv",
+            output_path="submission/ashraf__B.csv",
             evaluate=True,
             labels_path="company_B/seed_labels.csv",
+            data_dir=args.data_dir,
         )
+
+        # Also maintain __A.csv and __B.csv aliases for grading compatibility
+        import shutil
+        shutil.copy("submission/ashraf__A.csv", "submission/__A.csv")
+        shutil.copy("submission/ashraf__B.csv", "submission/__B.csv")
 
         print("\n================ SUMMARY METRICS ================")
         print("Company A Metrics:")
@@ -55,6 +63,7 @@ def main():
         output_path=args.output,
         evaluate=args.evaluate,
         labels_path=args.labels,
+        data_dir=args.data_dir,
     )
 
     if args.evaluate:

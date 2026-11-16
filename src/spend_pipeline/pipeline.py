@@ -28,12 +28,13 @@ def run_pipeline_for_company(
     output_path: Optional[str] = None,
     evaluate: bool = False,
     labels_path: Optional[str] = None,
+    data_dir: Optional[str] = None,
 ) -> Tuple[pd.DataFrame, Dict[str, Any]]:
     """
     Run end-to-end spend analytics & zero-shot classification pipeline for a single company config.
     """
     start_time = time.time()
-    config = load_config(config_path)
+    config = load_config(config_path, data_dir=data_dir)
     metrics: Dict[str, Any] = {"company_id": config.company_id}
 
     print(f"\n[{config.company_id}] Stage 1: Ingesting data & normalizing schemas...")

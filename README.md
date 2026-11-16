@@ -31,16 +31,16 @@ python3 run_pipeline.py --all
 ```
 
 Outputs are automatically validated and written to:
-- `submission/cantill__A.csv` (and `submission/__A.csv`)
-- `submission/cantill__B.csv` (and `submission/__B.csv`)
+- `submission/ashraf__A.csv` (and `submission/__A.csv`)
+- `submission/ashraf__B.csv` (and `submission/__B.csv`)
 
 ### 3. Run a Single Company
 ```bash
 # Company A
-python3 run_pipeline.py --config configs/company_A.yaml --output submission/cantill__A.csv --evaluate
+python3 run_pipeline.py --config configs/company_A.yaml --output submission/ashraf__A.csv --evaluate
 
 # Company B
-python3 run_pipeline.py --config configs/company_B.yaml --output submission/cantill__B.csv --evaluate
+python3 run_pipeline.py --config configs/company_B.yaml --output submission/ashraf__B.csv --evaluate
 ```
 
 ---
@@ -55,7 +55,7 @@ To process an unseen Company C with an arbitrary tree and layout at the blind te
 2. Update `configs/company_C.yaml` with Company C's file path, column aliases, reporting currency, and taxonomy path.
 3. Run the pipeline:
    ```bash
-   python3 run_pipeline.py --config configs/company_C.yaml --output submission/__C.csv
+   python3 run_pipeline.py --config configs/company_C.yaml --output submission/ashraf__C.csv
    ```
 *No code modifications required!*
 
@@ -89,8 +89,8 @@ To process an unseen Company C with an arbitrary tree and layout at the blind te
 │   ├── test_exporter.py        # Unit tests for schema validation & export constraints
 │   └── test_e2e.py             # Mini end-to-end integration test
 ├── submission/
-│   ├── cantill__A.csv          # Formatted output for Company A (65,549 rows)
-│   ├── cantill__B.csv          # Formatted output for Company B (41,028 rows)
+│   ├── ashraf__A.csv           # Formatted output for Company A (65,549 rows)
+│   ├── ashraf__B.csv           # Formatted output for Company B (41,028 rows)
 │   ├── __A.csv                 # Alias for grading compatibility
 │   └── __B.csv                 # Alias for grading compatibility
 ├── APPROACH.md                 # One-page executive summary & architecture overview

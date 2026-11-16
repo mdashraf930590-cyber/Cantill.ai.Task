@@ -87,8 +87,8 @@ class CompanyConfig:
     raw_config: Dict[str, Any] = field(default_factory=dict)
 
 
-def load_config(config_path: str) -> CompanyConfig:
-    """Load and validate a company YAML configuration file."""
+def load_config(config_path: str, data_dir: Optional[str] = None) -> CompanyConfig:
+    """Load and validate a company YAML configuration file with optional data_dir overrides."""
     path = Path(config_path)
     if not path.is_file():
         raise FileNotFoundError(f"Configuration file not found: {config_path}")
@@ -99,10 +99,16 @@ def load_config(config_path: str) -> CompanyConfig:
     sources_data = data.get("sources", [])
     sources = []
     for s in sources_data:
+        src_path = s.get("file_path", "")
+        if data_dir:
+            cand = Path(data_dir) / Path(src_path).name
+            if cand.is_file():
+                src_path = str(cand)
+
         sources.append(
             SourceConfig(
                 name=s.get("name", "source"),
-                file_path=s.get("file_path", ""),
+                file_path=src_path,
                 id_column=s.get("id_column", "line_id"),
                 record_id_prefix=s.get("record_id_prefix", ""),
                 is_primary=s.get("is_primary", True),
@@ -111,6 +117,24 @@ def load_config(config_path: str) -> CompanyConfig:
                 column_mapping=s.get("column_mapping", {}),
             )
         )
+
+    tax_file = data.get("taxonomy_file", "")
+    if data_dir:
+        cand_tax = Path(data_dir) / Path(tax_file).name
+        if cand_tax.is_file():
+            tax_file = str(cand_tax)
+
+    seed_file = data.get("seed_labels_file")
+    if data_dir and seed_file:
+        cand_seed = Path(data_dir) / Path(seed_file).name
+        if cand_seed.is_file():
+            seed_file = str(cand_seed)
+
+    fx_file = data.get("fx_rates_file")
+    if data_dir and fx_file:
+        cand_fx = Path(data_dir) / Path(fx_file).name
+        if cand_fx.is_file():
+            fx_file = str(cand_fx)
 
     gating_dict = data.get("gating", {})
     gating = GatingConfig(
@@ -156,10 +180,10 @@ def load_config(config_path: str) -> CompanyConfig:
     return CompanyConfig(
         company_id=data.get("company_id", path.stem),
         reporting_currency=data.get("reporting_currency", "USD").upper(),
-        taxonomy_file=data.get("taxonomy_file", ""),
+        taxonomy_file=tax_file,
         sources=sources,
-        seed_labels_file=data.get("seed_labels_file"),
-        fx_rates_file=data.get("fx_rates_file"),
+        seed_labels_file=seed_file,
+        fx_rates_file=fx_file,
         gating=gating,
         deduplication=dedup,
         entity_resolution=er,
