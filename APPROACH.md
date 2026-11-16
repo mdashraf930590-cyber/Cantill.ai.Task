@@ -78,3 +78,15 @@ To classify into an arbitrary, unseen category hierarchy (levels 1–4) without 
     $$\text{Cost per 1,000 lines} \approx 1,000 \times \left( \frac{80}{10^6} \times \$0.075 + \frac{20}{10^6} \times \$0.30 \right) \approx \mathbf{\$0.012\text{ per 1,000 lines}}$$
     Even routing 100% of rows to an external LLM costs only ~$0.012 per 1,000 lines ($0.30 for 25,000 rows).
 
+---
+
+## 6. AI Tools & Unattended Execution Statement
+- **AI Tools Used**:
+  - Local Multilingual Bi-Encoder: `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` (pre-cached, 100% offline, zero-network).
+  - Lexical Matching & String Similarity: `scikit-learn` TF-IDF character/word n-grams and `rapidfuzz` token-set ratio.
+  - Graph Partitioning: `scipy.sparse.csgraph.connected_components`.
+- **Unattended Execution**:
+  - The pipeline runs 100% unattended on new input files via a single CLI command (`python3 run_pipeline.py --config <file> --output <dest>`).
+  - No interactive prompts, no manual label input, and no runtime API key requirements.
+  - Free & Local Fallback: Runs entirely offline on standard CPU without external keys or network calls. To plug in an external API key if desired, set `OPENAI_API_KEY` or `GEMINI_API_KEY` in environment variables.
+
