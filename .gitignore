@@ -15,7 +15,11 @@ ENV/
 # Confidential data files (explicitly instructed by brief)
 company_A/
 company_B/
+company_*/
 *.pdf
+*.zip
+*.tar.gz
+*.tgz
 
 # Testing, coverage, and caches
 .pytest_cache/
