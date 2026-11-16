@@ -1,0 +1,67 @@
+company_id: company_B
+reporting_currency: USD
+taxonomy_file: company_B/taxonomy_B.csv
+seed_labels_file: company_B/seed_labels.csv
+fx_rates_file: company_B/fx_rates_usd.csv
+
+sources:
+  - name: erp_invoices
+    file_path: company_B/invoice_lines.csv
+    id_column: line_id
+    record_id_prefix: ""
+    is_primary: true
+    amount_type: net
+    default_vat_rate: 0.0
+    column_mapping:
+      amount: line_amount
+      date: invoice_date
+      currency: currency
+      currency_rate: currency_rate
+      vendor_id: vendor_id
+      item_description: line_description
+      material_number: material_number
+      po_number: po_number
+      invoice_number: invoice_number
+      gl_account: gl_account
+      gl_account_description: gl_account_description
+      document_type: document_type
+
+gating:
+  non_procurement_gl_prefixes:
+    - "IC"
+    - "I/C"
+  non_procurement_gl_keywords:
+    - "ic payables"
+    - "i/c payable"
+    - "intercompany"
+  non_procurement_desc_keywords:
+    - "sales tax"
+    - "state & local taxes"
+    - "gst input tax"
+    - "tax expense"
+    - "taxes -"
+    - "tax -"
+    - "intercompany"
+    - "royalty"
+    - "royalties"
+    - "financing fee"
+    - "dividend"
+  filter_zero_negative_offsets: true
+
+deduplication:
+  enabled: true
+  intra_system_dedup: false
+  cross_system_linkage: false
+
+entity_resolution:
+  supplier_similarity_threshold: 0.85
+  item_similarity_threshold: 0.85
+  blocking_prefix_len: 4
+
+classifier:
+  model_name: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+  batch_size: 256
+  hybrid_alpha: 0.4
+  temperature: 0.15
+  use_few_shot: true
+  few_shot_knn_k: 1

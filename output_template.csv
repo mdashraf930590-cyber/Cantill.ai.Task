@@ -1,0 +1,3 @@
+record_id,include,exclusion_reason,supplier_key,item_key,spend,l1,l2,l3,l4,confidence
+ERP:A000001,1,,acme engineering,valve-2in-ball,1234.56,Category L1,Category L2,Category L3,,0.82
+TOOL:TA000001,0,DUPLICATE,acme engineering,valve-2in-ball,0,,,,,0.95
