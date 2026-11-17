@@ -31,16 +31,16 @@ python3 run_pipeline.py --all
 ```
 
 Outputs are automatically validated and written to:
-- `submission/ashraf__A.csv` (and `submission/__A.csv`)
-- `submission/ashraf__B.csv` (and `submission/__B.csv`)
+- `submission/__A.csv`
+- `submission/__B.csv`
 
 ### 3. Run a Single Company
 ```bash
 # Company A
-python3 run_pipeline.py --config configs/company_A.yaml --output submission/ashraf__A.csv --evaluate
+python3 run_pipeline.py --config configs/company_A.yaml --output submission/__A.csv --evaluate
 
 # Company B
-python3 run_pipeline.py --config configs/company_B.yaml --output submission/ashraf__B.csv --evaluate
+python3 run_pipeline.py --config configs/company_B.yaml --output submission/__B.csv --evaluate
 ```
 
 ---

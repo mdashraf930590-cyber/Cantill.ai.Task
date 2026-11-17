@@ -26,7 +26,7 @@ def main():
         print("=== Running Pipeline for Company A ===")
         df_a, m_a = run_pipeline_for_company(
             config_path="configs/company_A.yaml",
-            output_path="submission/ashraf__A.csv",
+            output_path="submission/__A.csv",
             evaluate=True,
             labels_path="company_A/labels_A.csv",
             data_dir=args.data_dir,
@@ -35,16 +35,11 @@ def main():
         print("=== Running Pipeline for Company B ===")
         df_b, m_b = run_pipeline_for_company(
             config_path="configs/company_B.yaml",
-            output_path="submission/ashraf__B.csv",
+            output_path="submission/__B.csv",
             evaluate=True,
             labels_path="company_B/seed_labels.csv",
             data_dir=args.data_dir,
         )
-
-        # Also maintain __A.csv and __B.csv aliases for grading compatibility
-        import shutil
-        shutil.copy("submission/ashraf__A.csv", "submission/__A.csv")
-        shutil.copy("submission/ashraf__B.csv", "submission/__B.csv")
 
         print("\n================ SUMMARY METRICS ================")
         print("Company A Metrics:")
