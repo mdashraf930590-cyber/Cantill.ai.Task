@@ -21,6 +21,7 @@ os.environ["TRANSFORMERS_OFFLINE"] = "1"
 
 from sentence_transformers import SentenceTransformer
 from .config import CompanyConfig
+from .ingestion import safe_read_csv
 
 PROCUREMENT_ABBREVIATIONS = {
     r"\belec\b": "electric electrical",
@@ -70,7 +71,7 @@ class HierarchicalTaxonomy:
 
     def __init__(self, taxonomy_file_path: str):
         self.path = taxonomy_file_path
-        self.df = pd.read_csv(taxonomy_file_path)
+        self.df = safe_read_csv(taxonomy_file_path)
         # Determine category levels dynamically (up to l4)
         cols = self.df.columns.tolist()
         self.level_cols = []
@@ -162,7 +163,7 @@ class HierarchicalSpendClassifier:
 
     def _build_few_shot_prototypes(self):
         """Construct category prototype embeddings from seed labels."""
-        seed_df = pd.read_csv(self.config.seed_labels_file, low_memory=False)
+        seed_df = safe_read_csv(self.config.seed_labels_file)
         include_col = [c for c in seed_df.columns if "include" in c.lower()]
         if include_col:
             seed_df = seed_df[seed_df[include_col[0]] == 1]

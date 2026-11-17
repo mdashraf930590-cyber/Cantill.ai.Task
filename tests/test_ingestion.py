@@ -10,7 +10,13 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from spend_pipeline.ingestion import FXLookupManager, parse_clean_amount, parse_date_with_flag, parse_vat_rate
+from spend_pipeline.ingestion import (
+    FXLookupManager,
+    parse_clean_amount,
+    parse_date_with_flag,
+    parse_vat_rate,
+    safe_read_csv,
+)
 
 
 def test_parse_clean_amount():
@@ -69,4 +75,28 @@ def test_fx_lookup_manager(tmp_path):
 
     # Unknown currency default 1.0
     assert mgr.get_rate("XYZ", pd.to_datetime("2024-01-01")) == 1.0
+
+
+def test_safe_read_csv(tmp_path):
+    # 1. Standard comma CSV
+    csv1 = tmp_path / "std.csv"
+    csv1.write_text("id,val\n1,100\n2,200\n", encoding="utf-8")
+    df1 = safe_read_csv(str(csv1))
+    assert list(df1.columns) == ["id", "val"]
+    assert len(df1) == 2
+
+    # 2. Semicolon delimited CSV (European format)
+    csv2 = tmp_path / "semi.csv"
+    csv2.write_text("id;amount;currency\n1;500;EUR\n2;600;EUR\n", encoding="utf-8")
+    df2 = safe_read_csv(str(csv2))
+    assert list(df2.columns) == ["id", "amount", "currency"]
+    assert len(df2) == 2
+
+    # 3. UTF-8 with BOM (Excel export)
+    csv3 = tmp_path / "bom.csv"
+    csv3.write_bytes(b"\xef\xbb\xbfrecord_id,desc\n10,bolt\n")
+    df3 = safe_read_csv(str(csv3))
+    assert "record_id" in df3.columns
+    assert len(df3) == 1
+
 

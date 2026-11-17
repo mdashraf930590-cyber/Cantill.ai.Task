@@ -13,6 +13,34 @@ import pandas as pd
 from .config import CompanyConfig, SourceConfig
 
 
+def safe_read_csv(file_path: str, **kwargs) -> pd.DataFrame:
+    """
+    Robustly read CSV files handling encodings (utf-8, utf-8-sig, latin-1, cp1252)
+    and delimiter auto-detection (comma, semicolon, tab).
+    Guarantees seamless ingestion across European ERP and Windows accounting exports.
+    """
+    encodings = ["utf-8", "utf-8-sig", "latin-1", "cp1252"]
+    for enc in encodings:
+        try:
+            df = pd.read_csv(file_path, encoding=enc, low_memory=False, **kwargs)
+            if len(df.columns) == 1 and (";" in str(df.columns[0]) or "\t" in str(df.columns[0])):
+                sep = ";" if ";" in str(df.columns[0]) else "\t"
+                return pd.read_csv(file_path, encoding=enc, sep=sep, low_memory=False, **kwargs)
+            return df
+        except (UnicodeDecodeError, UnicodeError):
+            continue
+        except Exception:
+            break
+
+    for enc in encodings:
+        try:
+            return pd.read_csv(file_path, encoding=enc, sep=None, engine="python", **kwargs)
+        except Exception:
+            continue
+
+    return pd.read_csv(file_path, low_memory=False, **kwargs)
+
+
 def parse_clean_amount(val) -> float:
     """Robustly parse numeric spend amounts across messy procurement representations."""
     if pd.isna(val):
@@ -94,7 +122,7 @@ class FXLookupManager:
         self.fx_table = {}
         self.currency_means = {}
         if fx_file_path and Path(fx_file_path).is_file():
-            df = pd.read_csv(fx_file_path)
+            df = safe_read_csv(fx_file_path)
             # Expects columns: currency, month, units_per_usd
             curr_col = [c for c in df.columns if "curr" in c.lower()][0]
             month_col = [c for c in df.columns if "month" in c.lower() or "date" in c.lower()][0]
@@ -152,7 +180,7 @@ def ingest_company_data(config: CompanyConfig) -> pd.DataFrame:
     unified_frames = []
 
     for source in config.sources:
-        df_raw = pd.read_csv(source.file_path, low_memory=False)
+        df_raw = safe_read_csv(source.file_path)
         mapping = source.column_mapping
 
         # 1. Canonical Record ID
