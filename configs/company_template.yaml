@@ -3,7 +3,7 @@
 # Usage:
 #   1. Copy this file to configs/company_C.yaml
 #   2. Adjust column_mapping, taxonomy_file, and reporting_currency
-#   3. Run: python3 run_pipeline.py --config configs/company_C.yaml --output submission/cantill__C.csv
+#   3. Run: python3 run_pipeline.py --config configs/company_C.yaml --output submission/ashraf__C.csv
 # ==============================================================================
 
 company_id: company_C
