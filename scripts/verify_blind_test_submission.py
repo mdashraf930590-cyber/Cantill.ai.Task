@@ -10,7 +10,7 @@ import sys
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
-from spend_pipeline.exporter import validate_output_schema
+from spend_pipeline.exporter import validate_output_schema, SchemaValidationError
 
 REQUIRED_FILES = [
     "submission/ashraf__A2.csv",
@@ -45,16 +45,14 @@ def main():
     print("\n[2/3] Validating Submission CSV Schemas & Integrity...")
     for csv_file in REQUIRED_FILES[:3]:
         df = pd.read_csv(csv_file, low_memory=False)
-        is_valid, errors = validate_output_schema(df)
-        if is_valid:
+        try:
+            validate_output_schema(df)
             inc_count = (df["include"] == 1).sum()
             exc_count = (df["include"] == 0).sum()
             print(f"  [OK] {csv_file}:")
             print(f"       Total rows: {len(df):,} | Included: {inc_count:,} | Excluded: {exc_count:,}")
-        else:
-            print(f"  [FAIL] Schema error in {csv_file}:")
-            for err in errors:
-                print(f"         - {err}")
+        except SchemaValidationError as e:
+            print(f"  [FAIL] Schema error in {csv_file}: {e}")
             all_passed = False
 
     # 3. Git Status Reminder
